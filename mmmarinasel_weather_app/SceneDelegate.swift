@@ -1,10 +1,3 @@
-//
-//  SceneDelegate.swift
-//  mmmarinasel_weather_app
-//
-//  Created by Марина Селезнева on 15.12.2022.
-//
-
 import UIKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
