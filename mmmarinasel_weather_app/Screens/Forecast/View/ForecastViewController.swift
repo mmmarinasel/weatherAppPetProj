@@ -77,12 +77,16 @@ class ForecastViewController: UIViewController {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                               heightDimension: .fractionalHeight(1.0))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-
-        let groupSize = NSCollectionLayoutSize(widthDimension: .absolute(40),
+        let groupSize = NSCollectionLayoutSize(widthDimension: .absolute(60),
                                                heightDimension: .absolute(116))
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize,
                                                        subitems: [item])
+        group.interItemSpacing = .flexible(15)
         let section = NSCollectionLayoutSection(group: group)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0,
+                                                        leading: 10,
+                                                        bottom: 0,
+                                                        trailing: 10)
         section.orthogonalScrollingBehavior = .continuous
         section.boundarySupplementaryItems = [self.supplementaryHeaderViewItem()]
         return section
@@ -97,10 +101,10 @@ class ForecastViewController: UIViewController {
         let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize,
                                                        subitems: [item])
         let section = NSCollectionLayoutSection(group: group)
-//        section.contentInsets = NSDirectionalEdgeInsets(top: 0.5,
-//                                                        leading: 0,
-//                                                        bottom: 0.5,
-//                                                        trailing: 0)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 15,
+                                                        leading: 0,
+                                                        bottom: 15,
+                                                        trailing: 0)
         section.boundarySupplementaryItems = [self.supplementaryHeaderItem()]
         return section
     }
@@ -114,34 +118,19 @@ class ForecastViewController: UIViewController {
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize,
                                                        subitems: [item])
         let section = NSCollectionLayoutSection(group: group)
-//        section.contentInsets = NSDirectionalEdgeInsets(top: 0.5,
-//                                                        leading: 0,
-//                                                        bottom: 0,
-//                                                        trailing: 0.5)
         section.boundarySupplementaryItems = [self.supplementaryHeaderItem()]
         return section
     }
     
     private func createInfoSection() -> NSCollectionLayoutSection {
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.5),
                                               heightDimension: .fractionalHeight(1.0))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-//        item.contentInsets = .init(top: 0,
-//                                   leading: 0,
-//                                   bottom: 100,
-//                                   trailing: 0)
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                                heightDimension: /*.fractionalWidth(0.25)*/ .absolute(60))
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize,
                                                        repeatingSubitem: item,
                                                        count: 2)
-//        group.interItemSpacing = .fixed(50)
-//        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize,
-//                                                       subitems: [item])
-//        group.contentInsets = .init(top: 0.5,
-//                                    leading: 0,
-//                                    bottom: 0,
-//                                    trailing: 0)
         let section = NSCollectionLayoutSection(group: group)
         section.contentInsets = NSDirectionalEdgeInsets(top: 0,
                                                         leading: 20,
@@ -183,27 +172,41 @@ extension ForecastViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let section = SectionKind(rawValue: indexPath.section) else { return UICollectionViewCell() }
+        
         switch section {
         case .hourlyForecast:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HourlyForecastCollectionViewCell.id, for: indexPath) as? HourlyForecastCollectionViewCell
-//            cell?.backgroundColor = self.backgroundColor
-//            cell?.contentView.backgroundColor = self.backgroundColor
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HourlyForecastCollectionViewCell.id,
+                                                          for: indexPath) as? HourlyForecastCollectionViewCell
+            
+            cell?.setup(forecast: self.viewModel.weatherForecast.value as? WeatherForecast,
+                        idx: indexPath.row)
+            
             guard let cell = cell else { return UICollectionViewCell() }
             return cell
+            
         case .weeklyForecast:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WeeklyForecastCollectionViewCell.id, for: indexPath) as? WeeklyForecastCollectionViewCell
-//            cell?.backgroundColor = self.backgroundColor
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WeeklyForecastCollectionViewCell.id,
+                                                          for: indexPath) as? WeeklyForecastCollectionViewCell
+            
+            cell?.setup(forecast: self.viewModel.weatherForecast.value as? WeatherForecast,
+                        idx: indexPath.row)
             guard let cell = cell else { return UICollectionViewCell() }
+            
             return cell
+            
         case .description:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DescriptionCollectionViewCell.id, for: indexPath) as? DescriptionCollectionViewCell
-//            cell?.backgroundColor = self.backgroundColor
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DescriptionCollectionViewCell.id,
+                                                          for: indexPath) as? DescriptionCollectionViewCell
+            
             cell?.descriptionLabel.text = "Cloudy conditions will continue all day. Wind gusts are up ti 9 mph."
+            
             guard let cell = cell else { return UICollectionViewCell() }
             return cell
+            
         case .info:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: InfoCollectionViewCell.id, for: indexPath) as? InfoCollectionViewCell
-//            cell?.backgroundColor = self.backgroundColor
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: InfoCollectionViewCell.id,
+                                                          for: indexPath) as? InfoCollectionViewCell
+            
             guard let cell = cell else { return UICollectionViewCell() }
             return cell
         }
@@ -215,12 +218,12 @@ extension ForecastViewController: UICollectionViewDataSource {
             guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: ForecastCollectionReusableView.id, for: indexPath) as? ForecastCollectionReusableView
             else { return UICollectionReusableView() }
             if indexPath.section == 0 {
-                header.setLabels(text: "Moscow")
+//                if let value = self.viewModel.weatherForecast.value {
+                    header.setup(forecast: self.viewModel.weatherForecast.value as? WeatherForecast)
+//                }
             } else {
                 header.containerView.backgroundColor = .white
                 header.layer.opacity = 0.3
-//                header.containerView.removeFromSuperview()
-//                header.subviews.
             }
             
             return header

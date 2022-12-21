@@ -2,16 +2,8 @@ import UIKit
 
 class ForecastCollectionReusableView: UICollectionReusableView {
     
-    static let id = "forecastHeader"
-    
     @IBOutlet weak var containerView: UIView!
-    //    lazy var containerView: UIView = {
-//        var view = UIView()
-//        view.translatesAutoresizingMaskIntoConstraints = false
-//        view.backgroundColor = UIColor(named: "forecast_background")
-//        return view
-//    }()
-    
+
     lazy var cityLabel: UILabel = {
         let font = UIFont.systemFont(ofSize: 34)
         return self.buildLabel(font: font)
@@ -31,19 +23,15 @@ class ForecastCollectionReusableView: UICollectionReusableView {
         let font = UIFont.systemFont(ofSize: 20)
         return self.buildLabel(font: font)
     }()
+
+    static let id = "forecastHeader"
     
-    func setLabels(text: String) {
-//        self.addSubview(self.containerView)
-//        guard let superview = superview else { return }
-//        self.containerView.leadingAnchor.constraint(equalTo: superview.leadingAnchor).isActive = true
-//        self.containerView.trailingAnchor.constraint(equalTo: superview.trailingAnchor).isActive = true
-//        self.containerView.topAnchor.constraint(equalTo: superview.topAnchor).isActive = true
-//        self.containerView.bottomAnchor.constraint(equalTo: superview.bottomAnchor).isActive = true
-        
+    func setup(forecast: WeatherForecast?) {
         self.containerView.addSubview(self.cityLabel)
         self.cityLabel.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
         self.cityLabel.topAnchor.constraint(lessThanOrEqualTo: containerView.topAnchor,
                                             constant: 40).isActive = true
+        self.containerView.backgroundColor = UIColor(named: "forecast_background")
         
         self.containerView.addSubview(currentTempLabel)
         self.currentTempLabel.topAnchor.constraint(equalTo: self.cityLabel.bottomAnchor,
@@ -60,11 +48,16 @@ class ForecastCollectionReusableView: UICollectionReusableView {
                                              constant: 1).isActive = true
         self.tempsLabel.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
         
-        self.cityLabel.text = text
-        self.currentTempLabel.text = "7º"
-        self.descriptionLabel.text = "Mostly cloudy"
-        self.tempsLabel.text = "H:8º L: 0º"
-        self.containerView.backgroundColor = UIColor(named: "forecast_background")
+        guard let forecast = forecast else { return }
+        
+        self.cityLabel.text = forecast.location.name
+        let currentTemp = Int(forecast.current.temperature)
+        self.currentTempLabel.text = "\(currentTemp)º"
+        self.descriptionLabel.text = forecast.current.condition.text
+        guard let todayForecast = forecast.forecastday?[0].day else { return }
+        let minTemp = Int(todayForecast.minTemp)
+        let maxTemp = Int(todayForecast.maxTemp)
+        self.tempsLabel.text = "H:\(maxTemp)º L: \(minTemp)º"
     }
     
     func buildLabel(font: UIFont) -> UILabel {

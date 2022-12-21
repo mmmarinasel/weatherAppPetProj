@@ -18,12 +18,16 @@ class CitiesListViewController: UIViewController {
             DispatchQueue.main.async {
                 self?.citiesTableView.reloadData()
             }
-            
         }
+        print(Date.now)
     }
 
 
 }
+
+
+    // MARK: - UITableViewDelegate
+
 
 extension CitiesListViewController: UITableViewDelegate {
 
@@ -75,6 +79,10 @@ extension CitiesListViewController: UITableViewDelegate {
         }
     }
 }
+
+
+    // MARK: - UITableViewDataSource
+
 
 extension CitiesListViewController: UITableViewDataSource {
 

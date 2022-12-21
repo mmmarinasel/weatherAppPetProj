@@ -59,12 +59,14 @@ struct Day: Codable {
     var minTemp: Float
     var chanceOfRain: Int
     var chacneOfSnow: Int
+    var condition: Condition
     
     enum CodingKeys: String, CodingKey {
         case maxTemp = "maxtemp_c"
         case minTemp = "mintemp_c"
         case chanceOfRain = "daily_chance_of_rain"
         case chacneOfSnow = "daily_chance_of_snow"
+        case condition
     }
 }
 

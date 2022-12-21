@@ -7,7 +7,7 @@ class CitiesListViewModel {
     var weatherForecast: Observable<WeatherForecast?> = Observable(nil)
     
     init() {
-        Loader.getJson(urlString: Loader.weatherForecastUrl) { [weak self] weatherData in
+        ForecastService.getForecast(urlString: ForecastService.weatherForecastUrl) { [weak self] weatherData in
             let data: WeatherForecast = weatherData
             self?.weatherForecast.value = data
         }
