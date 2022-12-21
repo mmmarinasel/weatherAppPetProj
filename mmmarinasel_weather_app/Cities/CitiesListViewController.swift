@@ -7,6 +7,7 @@ class CitiesListViewController: UIViewController {
     private let viewModel = CitiesListViewModel()
     
     private let backgroundColor = UIColor(named: "list_background")
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.citiesTableView.backgroundView?.backgroundColor = self.backgroundColor
@@ -98,13 +99,10 @@ extension CitiesListViewController: UITableViewDataSource {
             cell.backgroundColor = self.backgroundColor
 //            cell.contentView.backgroundColor = self.backgroundColor
             let timeText = self.viewModel.weatherForecast.value??.location.localtime ?? ""
-//            let currentTemp: Int = Int(self.viewModel.weatherForecast.value??.current.temperature ?? 0)
-//            print(self.viewModel.weatherForecast.value??.current.temperature)
             let currentTemp = self.viewModel.weatherForecast.value??.current.temperature ?? 0
             cell.setTimeLabel(date: timeText)
             cell.cityLabel.text = self.viewModel.cities[indexPath.row]
             cell.setTempLabel(tempFloat: currentTemp)
-//            cell.currentTempLabel.text = "\(currentTemp)º"
             return cell
         default:
             return UITableViewCell()
@@ -113,6 +111,11 @@ extension CitiesListViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        let storyboard: UIStoryboard = UIStoryboard(name: "Forecast", bundle: nil)
+        let forecastVC  = storyboard.instantiateViewController(withIdentifier: ForecastViewController.id) as? ForecastViewController
+        guard let vc = forecastVC else { return }
+        vc.modalPresentationStyle = .fullScreen
+        self.present(vc, animated: true)
     }
 }
 

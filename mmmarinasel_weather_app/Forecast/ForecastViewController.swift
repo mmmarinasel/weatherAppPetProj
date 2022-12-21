@@ -21,22 +21,147 @@ class ForecastViewController: UIViewController {
     @IBOutlet weak var forecastCollectionView: UICollectionView!
     
     @IBAction func backButton(_ sender: Any) {
-        
+        self.dismiss(animated: true)
     }
     
     private var viewModel = CitiesListViewModel()
+    static let id: String = "forecastVC"
+    private let backgroundColor = UIColor(named: "forecast_background")
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//        self.viewModel.weatherForecast.bind { [weak self] _ in
-//
-//        }
+        self.viewModel.weatherForecast.bind { [weak self] _ in
+            DispatchQueue.main.async {
+                self?.forecastCollectionView.reloadData()
+            }
+        }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.forecastCollectionView.collectionViewLayout = createLayout()
+        self.view.backgroundColor = self.backgroundColor
+        self.forecastCollectionView.backgroundColor = self.backgroundColor
+    }
+    
+    
+    // MARK: - UICollectionViewLayout
+    
+    
+    private func createLayout() -> UICollectionViewLayout {
+        let layout = UICollectionViewCompositionalLayout { [weak self] (sectionIndex, layoutEnviroment) -> NSCollectionLayoutSection? in
+            let section = SectionKind(rawValue: sectionIndex)
+            guard let section = section else { return nil }
+            switch section {
+            case .hourlyForecast:
+                return self?.createHourlyForecastSection()
+            case .weeklyForecast:
+                return self?.createWeeklyForecastSection()
+            case .description:
+                return self?.createDescrSection()
+            case .info:
+                return self?.createInfoSection()
+            }
+        }
+        let config = UICollectionViewCompositionalLayoutConfiguration()
+        layout.configuration = config
+        return layout
+    }
+    
+    
+    // MARK: - NSCollectionLayoutSection
+    
+    
+    private func createHourlyForecastSection() -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                              heightDimension: .fractionalHeight(1.0))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+
+        let groupSize = NSCollectionLayoutSize(widthDimension: .absolute(40),
+                                               heightDimension: .absolute(116))
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize,
+                                                       subitems: [item])
+        let section = NSCollectionLayoutSection(group: group)
+        section.orthogonalScrollingBehavior = .continuous
+        section.boundarySupplementaryItems = [self.supplementaryHeaderViewItem()]
+        return section
+    }
+    
+    private func createWeeklyForecastSection() -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                              heightDimension: .fractionalHeight(31))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                               heightDimension: .estimated(1))
+        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize,
+                                                       subitems: [item])
+        let section = NSCollectionLayoutSection(group: group)
+//        section.contentInsets = NSDirectionalEdgeInsets(top: 0.5,
+//                                                        leading: 0,
+//                                                        bottom: 0.5,
+//                                                        trailing: 0)
+        section.boundarySupplementaryItems = [self.supplementaryHeaderItem()]
+        return section
+    }
+    
+    private func createDescrSection() -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                              heightDimension: .fractionalHeight(1.0))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                               heightDimension: .absolute(60))
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize,
+                                                       subitems: [item])
+        let section = NSCollectionLayoutSection(group: group)
+//        section.contentInsets = NSDirectionalEdgeInsets(top: 0.5,
+//                                                        leading: 0,
+//                                                        bottom: 0,
+//                                                        trailing: 0.5)
+        section.boundarySupplementaryItems = [self.supplementaryHeaderItem()]
+        return section
+    }
+    
+    private func createInfoSection() -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                              heightDimension: .fractionalHeight(1.0))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+//        item.contentInsets = .init(top: 0,
+//                                   leading: 0,
+//                                   bottom: 100,
+//                                   trailing: 0)
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                               heightDimension: /*.fractionalWidth(0.25)*/ .absolute(60))
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize,
+                                                       repeatingSubitem: item,
+                                                       count: 2)
+//        group.interItemSpacing = .fixed(50)
+//        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize,
+//                                                       subitems: [item])
+//        group.contentInsets = .init(top: 0.5,
+//                                    leading: 0,
+//                                    bottom: 0,
+//                                    trailing: 0)
+        let section = NSCollectionLayoutSection(group: group)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0,
+                                                        leading: 20,
+                                                        bottom: 0,
+                                                        trailing: 20)
+        section.interGroupSpacing = 0.5
+        section.boundarySupplementaryItems = [self.supplementaryHeaderItem()]
+        return section
     }
     
     private func supplementaryHeaderItem() -> NSCollectionLayoutBoundarySupplementaryItem {
         .init(layoutSize: .init(widthDimension: .fractionalWidth(1),
-                                heightDimension: .estimated(50)),
+                                heightDimension: .estimated(0.5)),
+              elementKind: UICollectionView.elementKindSectionHeader,
+              alignment: .top)
+    }
+    
+    private func supplementaryHeaderViewItem() -> NSCollectionLayoutBoundarySupplementaryItem {
+        .init(layoutSize: .init(widthDimension: .fractionalWidth(1),
+                                heightDimension: .estimated(326)),
               elementKind: UICollectionView.elementKindSectionHeader,
               alignment: .top)
     }
@@ -45,7 +170,7 @@ class ForecastViewController: UIViewController {
 
     // MARK: - UICollectionViewDataSource, UICollectionViewDelegate
 
-extension ForecastViewController: UICollectionViewDataSource, UICollectionViewDelegate {
+extension ForecastViewController: UICollectionViewDataSource {
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return SectionKind.allCases.count
@@ -57,10 +182,50 @@ extension ForecastViewController: UICollectionViewDataSource, UICollectionViewDe
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
+        guard let section = SectionKind(rawValue: indexPath.section) else { return UICollectionViewCell() }
+        switch section {
+        case .hourlyForecast:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HourlyForecastCollectionViewCell.id, for: indexPath) as? HourlyForecastCollectionViewCell
+//            cell?.backgroundColor = self.backgroundColor
+//            cell?.contentView.backgroundColor = self.backgroundColor
+            guard let cell = cell else { return UICollectionViewCell() }
+            return cell
+        case .weeklyForecast:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WeeklyForecastCollectionViewCell.id, for: indexPath) as? WeeklyForecastCollectionViewCell
+//            cell?.backgroundColor = self.backgroundColor
+            guard let cell = cell else { return UICollectionViewCell() }
+            return cell
+        case .description:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DescriptionCollectionViewCell.id, for: indexPath) as? DescriptionCollectionViewCell
+//            cell?.backgroundColor = self.backgroundColor
+            cell?.descriptionLabel.text = "Cloudy conditions will continue all day. Wind gusts are up ti 9 mph."
+            guard let cell = cell else { return UICollectionViewCell() }
+            return cell
+        case .info:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: InfoCollectionViewCell.id, for: indexPath) as? InfoCollectionViewCell
+//            cell?.backgroundColor = self.backgroundColor
+            guard let cell = cell else { return UICollectionViewCell() }
+            return cell
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        <#code#>
+        switch kind {
+        case UICollectionView.elementKindSectionHeader:
+            guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: ForecastCollectionReusableView.id, for: indexPath) as? ForecastCollectionReusableView
+            else { return UICollectionReusableView() }
+            if indexPath.section == 0 {
+                header.setLabels(text: "Moscow")
+            } else {
+                header.containerView.backgroundColor = .white
+                header.layer.opacity = 0.3
+//                header.containerView.removeFromSuperview()
+//                header.subviews.
+            }
+            
+            return header
+        default:
+            return UICollectionReusableView()
+        }
     }
 }
