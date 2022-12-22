@@ -1,10 +1,11 @@
 import Foundation
 
 class ForecastViewModel: NSObject {
+    
+    let weatherForecastUrl = "https://api.weatherapi.com/v1/forecast.json?key=ae5d9a6d0f044d30abb231756221712&q="
+    
     var weatherForecast: Observable<WeatherForecast?> = Observable(nil)
-    
     var reloadCollectionView: (() -> Void)?
-    
     var hourlyCellViewModels = [HourlyCellViewModel]() {
         didSet {
             reloadCollectionView?()
@@ -17,15 +18,33 @@ class ForecastViewModel: NSObject {
         }
     }
     
+    var infoCellViewModels = [InfoCellViewModel]() {
+        didSet {
+            reloadCollectionView?()
+        }
+    }
+
+    var city: String? {
+        didSet {
+            self.getDataForCity()
+        }
+    }
+    
     override init() {
         super.init()
-        ForecastService.getForecast(urlString: ForecastService.weatherForecastUrl) { [weak self] weatherData in
+    }
+    
+    func getDataForCity() {
+        let replaced = self.city?.replacingOccurrences(of: " ", with: "%20")
+        
+        let url: String = "\(self.weatherForecastUrl)\(replaced ?? "")&days=8"
+        ForecastService.getForecast(urlString: url) { [weak self] weatherData in
             let data: WeatherForecast = weatherData
             self?.weatherForecast.value = data
             self?.fetchHourlyData()
             self?.fetchWeeklyData()
+            self?.fetchInfoData()
         }
-        
     }
     
     func getHourlyCellViewModel(at indexPath: IndexPath) -> HourlyCellViewModel? {
@@ -36,6 +55,11 @@ class ForecastViewModel: NSObject {
     func getWeeklyCellViewModel(at indexPath: IndexPath) -> WeeklyCellViewModel? {
         guard !weeklyCellViewModels.isEmpty else { return nil }
         return self.weeklyCellViewModels[indexPath.row]
+    }
+    
+    func getInfoCellViewModel(at indexPath: IndexPath) -> InfoCellViewModel? {
+        guard !infoCellViewModels.isEmpty else { return nil }
+        return self.infoCellViewModels[indexPath.row]
     }
     
     func fetchHourlyData() {
@@ -80,6 +104,28 @@ class ForecastViewModel: NSObject {
 //        }
         vms.append(createWeeklyCellModel(forecast: forecasts[1]))
         self.weeklyCellViewModels = vms
+    }
+    
+    func fetchInfoData() {
+        var vms = [InfoCellViewModel]()
+        guard let forecast = self.weatherForecast.value else { return }
+        guard let forecasts = forecast?.forecast.forecastday else { return }
+        guard let forecastTime = forecast?.location.localtime else { return }
+        vms.append(InfoCellViewModel(name: "SUNRISE", info: forecasts[0].astro.sunrise))
+        vms.append(InfoCellViewModel(name: "SUNSET", info: forecasts[0].astro.sunset))
+        for item in forecasts[0].hourlyForecast {
+            if convertDateFormat(item.time, dateFormat: "yyyy-MM-dd HH") == convertDateFormat(forecastTime, dateFormat: "yyyy-MM-dd HH") {
+                vms.append(InfoCellViewModel(name: "CHANCE OF RAIN", info: "\(item.chanceOfRain)%"))
+                vms.append(InfoCellViewModel(name: "HUMIDITY", info: "\(item.humidity)%"))
+                vms.append(InfoCellViewModel(name: "WIND", info: "\(item.windDirectory) \(Int(item.windSpeed)) km/hr"))
+                vms.append(InfoCellViewModel(name: "FEELS LIKE", info: "\(Int(item.feelsLike))º"))
+                vms.append(InfoCellViewModel(name: "PRECIPITATION", info: "\(Int(item.precipitation)) cm"))
+                vms.append(InfoCellViewModel(name: "PRESSURE", info: "\(Int(item.pressure)) hPa"))
+                vms.append(InfoCellViewModel(name: "VISIBILITY", info: "\(item.visibility) km"))
+                vms.append(InfoCellViewModel(name: "UV INDEX", info: "\(Int(item.uv))"))
+            }
+        }
+        self.infoCellViewModels = vms
     }
     
     func createHourlyCellModel(forecast: HourlyForecast) -> HourlyCellViewModel {
@@ -157,7 +203,7 @@ class ForecastViewModel: NSObject {
             return "cloudy"
         case "Partly cloudy", "Overcast":
             return "overcast"
-        case "Thunderstorm":
+        case "Thunderstorm", "Thunder", "Moderate or heavy rain with thunder":
             return "thunderstorm"
         default:
             return "cloudy"

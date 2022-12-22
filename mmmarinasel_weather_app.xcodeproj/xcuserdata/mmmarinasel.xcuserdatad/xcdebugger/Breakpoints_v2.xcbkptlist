@@ -216,14 +216,14 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "E437E2C6-B00F-4112-A568-20B931CAA776"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "mmmarinasel_weather_app/Screens/Forecast/View/ForecastViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "41"
-            endingLineNumber = "41"
+            startingLineNumber = "46"
+            endingLineNumber = "46"
             landmarkName = "viewDidLoad()"
             landmarkType = "7">
          </BreakpointContent>
@@ -231,16 +231,112 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "A9334573-303A-442A-A199-CDFC31D3485F"
+            uuid = "FAB49B3B-B8C5-4079-BE0C-CE20E2F6EAB6"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "mmmarinasel_weather_app/Screens/Forecast/ViewModel/ForecastViewModel.swift"
+            filePath = "mmmarinasel_weather_app/Screens/Cities/ViewModel/CitiesListViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "25"
-            endingLineNumber = "25"
-            landmarkName = "init()"
+            startingLineNumber = "44"
+            endingLineNumber = "44"
+            landmarkName = "fetchCitiesData()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "1BC8B337-B3FD-4DA9-B6A8-4431BF7ACDA5"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "mmmarinasel_weather_app/Service/ForecastService.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "21"
+            endingLineNumber = "21"
+            landmarkName = "getForecast(urlString:completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "3615D5D7-1AAB-4088-90D3-D0625331DCA7"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "mmmarinasel_weather_app/Service/ForecastService.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "15"
+            endingLineNumber = "15"
+            landmarkName = "getForecast(urlString:completion:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "3615D5D7-1AAB-4088-90D3-D0625331DCA7 - 89ec54ff823e0fb2"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "static mmmarinasel_weather_app.ForecastService.getForecast&lt;&#x3c4;_0_0 where &#x3c4;_0_0: Swift.Decodable, &#x3c4;_0_0: Swift.Encodable&gt;(urlString: Swift.String, completion: (&#x3c4;_0_0) -&gt; ()) -&gt; ()"
+                  moduleName = "mmmarinasel_weather_app"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mmmarinasel/Developer/mmmarinasel_weather_app/mmmarinasel_weather_app/Service/ForecastService.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "15"
+                  endingLineNumber = "15"
+                  offsetFromSymbolStart = "89">
+               </Location>
+               <Location
+                  uuid = "3615D5D7-1AAB-4088-90D3-D0625331DCA7 - a0c9713bd0d2994f"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Optional&lt;Foundation.Data&gt;, Swift.Optional&lt;__C.NSURLResponse&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in static mmmarinasel_weather_app.ForecastService.getForecast&lt;&#x3c4;_0_0 where &#x3c4;_0_0: Swift.Decodable, &#x3c4;_0_0: Swift.Encodable&gt;(urlString: Swift.String, completion: (&#x3c4;_0_0) -&gt; ()) -&gt; ()"
+                  moduleName = "mmmarinasel_weather_app"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mmmarinasel/Developer/mmmarinasel_weather_app/mmmarinasel_weather_app/Service/ForecastService.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "16"
+                  endingLineNumber = "16"
+                  offsetFromSymbolStart = "220">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "9CC74D77-2C47-4A00-B091-9AE56AEB574C"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "mmmarinasel_weather_app/Screens/Forecast/View/ForecastViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "29"
+            endingLineNumber = "29"
+            landmarkName = "city"
+            landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "E302747C-AABC-4224-8552-F1EF391A8F60"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "mmmarinasel_weather_app/Screens/Cities/View/CitiesListViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "126"
+            endingLineNumber = "126"
+            landmarkName = "tableView(_:didSelectRowAt:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

@@ -31,6 +31,8 @@ class ForecastCollectionReusableView: UICollectionReusableView {
         self.cityLabel.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
         self.cityLabel.topAnchor.constraint(lessThanOrEqualTo: containerView.topAnchor,
                                             constant: 40).isActive = true
+        self.cityLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: 20).isActive = true
+        self.cityLabel.numberOfLines = 0
         self.containerView.backgroundColor = UIColor(named: "forecast_background")
         
         self.containerView.addSubview(currentTempLabel)

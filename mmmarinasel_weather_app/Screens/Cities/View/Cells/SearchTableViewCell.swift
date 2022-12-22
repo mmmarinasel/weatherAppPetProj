@@ -2,7 +2,7 @@ import UIKit
 
 class SearchTableViewCell: UITableViewCell {
 
-    @IBOutlet weak var searchBar: UISearchBar!
+    @IBOutlet weak var searchTextField: SearchTextField!
     
     static let id: String = "searchCell"
     

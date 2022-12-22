@@ -6,8 +6,6 @@ protocol ForecastServiceProtocol {
 
 class ForecastService: ForecastServiceProtocol {
     
-    static let weatherForecastUrl = "https://api.weatherapi.com/v1/forecast.json?key=ae5d9a6d0f044d30abb231756221712&q=Warsaw&days=8"
-    
     private static func getData(urlString: String, completion: @escaping (Data?, URLResponse?, Error?) -> Void) {
         guard let url = URL(string: urlString) else { return }
         URLSession.shared.dataTask(with: url, completionHandler: completion).resume()
@@ -19,6 +17,7 @@ class ForecastService: ForecastServiceProtocol {
                 print(error.localizedDescription)
                 return
             }
+            print(data)
             guard let data = data else { return }
             
             do {

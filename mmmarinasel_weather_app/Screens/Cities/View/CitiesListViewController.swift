@@ -4,7 +4,10 @@ class CitiesListViewController: UIViewController {
 
     @IBOutlet weak var citiesTableView: UITableView!
     
-    private let viewModel = CitiesListViewModel()
+    @IBAction func searchTextField(_ sender: Any) {
+        print("lalallalalala")
+    }
+    private var viewModel = CitiesListViewModel()
     
     private let backgroundColor = UIColor(named: "list_background")
     
@@ -14,14 +17,17 @@ class CitiesListViewController: UIViewController {
         self.view.backgroundColor = self.backgroundColor
         self.citiesTableView.backgroundColor = self.backgroundColor
         
-        self.viewModel.weatherForecast.bind { [weak self] _ in
+        self.viewModel.currentWeather.bind { [weak self] _ in
+            DispatchQueue.main.async {
+                self?.citiesTableView.reloadData()
+            }
+        }
+        self.viewModel.reloadTableView = { [weak self] in
             DispatchQueue.main.async {
                 self?.citiesTableView.reloadData()
             }
         }
     }
-
-
 }
 
 
@@ -31,7 +37,7 @@ class CitiesListViewController: UIViewController {
 extension CitiesListViewController: UITableViewDelegate {
 
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return self.viewModel.currentWeather.value?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
@@ -56,7 +62,7 @@ extension CitiesListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         switch section {
         case 0:
-            let height = self.view.frame.height / 8
+            let height = self.view.frame.height / 9
             return height
         case 1:
             return 10
@@ -68,11 +74,9 @@ extension CitiesListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.section {
         case 0:
-            let height = self.view.frame.height / 22
-            return height
+            return 40
         case 1:
-            let height = self.view.frame.height / 9
-            return height
+            return 90
         default:
             return 0
         }
@@ -90,7 +94,7 @@ extension CitiesListViewController: UITableViewDataSource {
         case 0:
             return 1
         case 1:
-            return self.viewModel.cities.count
+            return self.viewModel.currentWeather.value?.count ?? 0
         default:
             return 0
         }
@@ -100,16 +104,13 @@ extension CitiesListViewController: UITableViewDataSource {
         switch indexPath.section {
         case 0:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: SearchTableViewCell.id) as? SearchTableViewCell else { return UITableViewCell() }
+            cell.backgroundColor = self.backgroundColor
             return cell
         case 1:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: CityTableViewCell.id) as? CityTableViewCell else { return UITableViewCell() }
             cell.backgroundColor = self.backgroundColor
-//            cell.contentView.backgroundColor = self.backgroundColor
-            let timeText = self.viewModel.weatherForecast.value??.location.localtime ?? ""
-            let currentTemp = self.viewModel.weatherForecast.value??.current.temperature ?? 0
-            cell.setTimeLabel(date: timeText)
-            cell.cityLabel.text = self.viewModel.cities[indexPath.row]
-            cell.setTempLabel(tempFloat: currentTemp)
+            let cellVM = self.viewModel.getCityCellViewModel(at: indexPath)
+            cell.cellViewModel = cellVM
             return cell
         default:
             return UITableViewCell()
@@ -122,6 +123,7 @@ extension CitiesListViewController: UITableViewDataSource {
         let forecastVC  = storyboard.instantiateViewController(withIdentifier: ForecastViewController.id) as? ForecastViewController
         guard let vc = forecastVC else { return }
         vc.modalPresentationStyle = .fullScreen
+        vc.city = self.viewModel.currentWeather.value?[indexPath.row].location.name ?? ""
         self.present(vc, animated: true)
     }
 }

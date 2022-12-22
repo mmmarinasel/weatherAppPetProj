@@ -5,7 +5,17 @@ class CityTableViewCell: UITableViewCell {
     @IBOutlet weak var currentTempLabel: UILabel!
     @IBOutlet weak var cityLabel: UILabel!
     @IBOutlet weak var timeLabel: UILabel!
+    @IBOutlet weak var weatherImageView: UIImageView!
     static let id: String = "cityCell"
+    
+    var cellViewModel: CityCellViewModel? {
+        didSet {
+            currentTempLabel.text = cellViewModel?.currentTemperature
+            cityLabel.text = cellViewModel?.city
+            timeLabel.text = cellViewModel?.time
+            weatherImageView.image = UIImage(named: cellViewModel?.imageName ?? "sunny")
+        }
+    }
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -13,20 +23,5 @@ class CityTableViewCell: UITableViewCell {
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-    }
-    
-    func setTimeLabel(date: String) {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
-        let date = dateFormatter.date(from: date) ?? Date.now
-        dateFormatter.dateFormat = "HH:mm"
-        let dateStr = dateFormatter.string(from: date)
-        self.timeLabel.text = dateStr
-    }
-    
-    func setTempLabel(tempFloat: Float?) {
-        guard let tempFloat = tempFloat else { return }
-        let temp = Int(tempFloat)
-        self.currentTempLabel.text = "\(temp)º"
     }
 }

@@ -3,6 +3,7 @@
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -26,29 +27,51 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="lQ4-O3-AhF">
-                                                    <rect key="frame" x="20" y="0.0" width="335" height="56"/>
+                                                <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Search" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="JJK-Gs-3Wb" customClass="SearchTextField" customModule="mmmarinasel_weather_app" customModuleProvider="target">
+                                                    <rect key="frame" x="20" y="4" width="335" height="36"/>
+                                                    <color key="backgroundColor" red="0.11764705882352941" green="0.11764705882352941" blue="0.11764705882352941" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="36" id="wYr-i3-Zqp"/>
+                                                    </constraints>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits"/>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="image" keyPath="leftImage">
+                                                            <imageReference key="value" image="magnifyingglass" catalog="system" symbolScale="medium"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="leftPadding">
+                                                            <real key="value" value="8"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                        <userDefinedRuntimeAttribute type="color" keyPath="color">
+                                                            <color key="value" red="0.69803921568627447" green="0.69803921568627447" blue="0.71372549019607845" alpha="1" colorSpace="calibratedRGB"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                            <integer key="value" value="10"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
+                                                    </userDefinedRuntimeAttributes>
                                                     <connections>
-                                                        <outlet property="delegate" destination="BYZ-38-t0r" id="5KI-cy-0br"/>
+                                                        <action selector="searchTextField:" destination="BYZ-38-t0r" eventType="editingChanged" id="v09-TF-dKa"/>
+                                                        <outlet property="delegate" destination="BYZ-38-t0r" id="DKb-Mj-15p"/>
                                                     </connections>
-                                                </searchBar>
+                                                </textField>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstAttribute="trailing" secondItem="lQ4-O3-AhF" secondAttribute="trailing" constant="20" id="QEV-Zm-Blh"/>
-                                                <constraint firstItem="lQ4-O3-AhF" firstAttribute="leading" secondItem="yQu-Zm-YJa" secondAttribute="leading" constant="20" id="YV8-fe-WjO"/>
-                                                <constraint firstItem="lQ4-O3-AhF" firstAttribute="top" secondItem="yQu-Zm-YJa" secondAttribute="top" id="jAn-SK-X46"/>
+                                                <constraint firstItem="JJK-Gs-3Wb" firstAttribute="centerX" secondItem="yQu-Zm-YJa" secondAttribute="centerX" id="223-5j-sh8"/>
+                                                <constraint firstItem="JJK-Gs-3Wb" firstAttribute="leading" secondItem="yQu-Zm-YJa" secondAttribute="leading" constant="20" id="E79-Hn-6d2"/>
+                                                <constraint firstItem="JJK-Gs-3Wb" firstAttribute="centerY" secondItem="yQu-Zm-YJa" secondAttribute="centerY" id="Vew-gC-0tI"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <outlet property="searchBar" destination="lQ4-O3-AhF" id="AEs-5w-HbE"/>
+                                            <outlet property="searchTextField" destination="JJK-Gs-3Wb" id="mT7-0S-1Mg"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="cityCell" rowHeight="90" id="5vE-MX-zWc" customClass="CityTableViewCell" customModule="mmmarinasel_weather_app" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="94" width="375" height="90"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="cityCell" rowHeight="100" id="5vE-MX-zWc" customClass="CityTableViewCell" customModule="mmmarinasel_weather_app" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="94" width="375" height="100"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="5vE-MX-zWc" id="O7P-GO-AjE">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="90"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="100"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pad-AA-EdH">
@@ -58,7 +81,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="lala" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vmC-hD-G7f">
-                                                    <rect key="frame" x="36" y="32" width="38.5" height="30"/>
+                                                    <rect key="frame" x="36" y="32" width="152.5" height="30"/>
                                                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="25"/>
                                                     <color key="textColor" systemColor="systemBackgroundColor"/>
                                                     <nil key="highlightedColor"/>
@@ -70,7 +93,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sunny" translatesAutoresizingMaskIntoConstraints="NO" id="VO9-cL-BTA">
-                                                    <rect key="frame" x="193.5" y="24" width="42" height="42"/>
+                                                    <rect key="frame" x="193.5" y="29" width="42" height="42"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="42" id="IkJ-H7-9MJ"/>
                                                         <constraint firstAttribute="height" constant="42" id="nE4-ax-qD1"/>
@@ -83,17 +106,19 @@
                                                 <constraint firstAttribute="trailing" secondItem="TfY-pd-lNr" secondAttribute="trailing" constant="20" id="HGJ-vu-sEX"/>
                                                 <constraint firstItem="vmC-hD-G7f" firstAttribute="leading" secondItem="O7P-GO-AjE" secondAttribute="leadingMargin" constant="20" id="L1b-Hu-zB1"/>
                                                 <constraint firstItem="VO9-cL-BTA" firstAttribute="leading" secondItem="pad-AA-EdH" secondAttribute="trailing" constant="120" id="O7r-iD-DEv"/>
-                                                <constraint firstItem="VO9-cL-BTA" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="vmC-hD-G7f" secondAttribute="trailing" priority="800" constant="5" id="c5P-cB-JYA"/>
+                                                <constraint firstItem="VO9-cL-BTA" firstAttribute="leading" secondItem="vmC-hD-G7f" secondAttribute="trailing" constant="5" id="c5P-cB-JYA"/>
                                                 <constraint firstItem="TfY-pd-lNr" firstAttribute="leading" secondItem="VO9-cL-BTA" secondAttribute="trailing" constant="25" id="g3a-2A-EeP"/>
                                                 <constraint firstItem="pad-AA-EdH" firstAttribute="top" secondItem="O7P-GO-AjE" secondAttribute="topMargin" id="gdb-8L-3lZ"/>
                                                 <constraint firstItem="vmC-hD-G7f" firstAttribute="top" secondItem="pad-AA-EdH" secondAttribute="bottom" constant="3" id="nP5-y4-8an"/>
                                                 <constraint firstItem="TfY-pd-lNr" firstAttribute="top" secondItem="O7P-GO-AjE" secondAttribute="top" constant="10" id="rJQ-ii-tBF"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <color key="backgroundColor" red="0.80000000000000004" green="0.80000000000000004" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <connections>
                                             <outlet property="cityLabel" destination="vmC-hD-G7f" id="vIg-ks-y4A"/>
                                             <outlet property="currentTempLabel" destination="TfY-pd-lNr" id="7ls-tY-nDI"/>
                                             <outlet property="timeLabel" destination="pad-AA-EdH" id="qBF-kD-KKU"/>
+                                            <outlet property="weatherImageView" destination="VO9-cL-BTA" id="GkC-Oh-dI8"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -121,7 +146,13 @@
             <point key="canvasLocation" x="-298" y="1"/>
         </scene>
     </scenes>
+    <designables>
+        <designable name="JJK-Gs-3Wb">
+            <size key="intrinsicContentSize" width="101" height="34"/>
+        </designable>
+    </designables>
     <resources>
+        <image name="magnifyingglass" catalog="system" width="128" height="117"/>
         <image name="sunny" width="42" height="42"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
