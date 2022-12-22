@@ -19,7 +19,6 @@ class CitiesListViewController: UIViewController {
                 self?.citiesTableView.reloadData()
             }
         }
-        print(Date.now)
     }
 
 

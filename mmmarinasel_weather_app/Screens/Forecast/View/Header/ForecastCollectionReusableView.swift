@@ -54,7 +54,7 @@ class ForecastCollectionReusableView: UICollectionReusableView {
         let currentTemp = Int(forecast.current.temperature)
         self.currentTempLabel.text = "\(currentTemp)º"
         self.descriptionLabel.text = forecast.current.condition.text
-        guard let todayForecast = forecast.forecastday?[0].day else { return }
+        let todayForecast = forecast.forecast.forecastday[0].day
         let minTemp = Int(todayForecast.minTemp)
         let maxTemp = Int(todayForecast.maxTemp)
         self.tempsLabel.text = "H:\(maxTemp)º L: \(minTemp)º"

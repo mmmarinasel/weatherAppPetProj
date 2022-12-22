@@ -19,12 +19,12 @@ class ForecastViewController: UIViewController {
     }
 
     @IBOutlet weak var forecastCollectionView: UICollectionView!
-    
     @IBAction func backButton(_ sender: Any) {
         self.dismiss(animated: true)
     }
     
-    private var viewModel = CitiesListViewModel()
+    private var viewModel = ForecastViewModel()
+    
     static let id: String = "forecastVC"
     private let backgroundColor = UIColor(named: "forecast_background")
     
@@ -35,6 +35,12 @@ class ForecastViewController: UIViewController {
             DispatchQueue.main.async {
                 self?.forecastCollectionView.reloadData()
             }
+        }
+        self.viewModel.reloadCollectionView = { [weak self] in
+            DispatchQueue.main.async {
+                self?.forecastCollectionView.reloadData()
+            }
+            
         }
     }
     
@@ -177,19 +183,16 @@ extension ForecastViewController: UICollectionViewDataSource {
         case .hourlyForecast:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HourlyForecastCollectionViewCell.id,
                                                           for: indexPath) as? HourlyForecastCollectionViewCell
-            
-            cell?.setup(forecast: self.viewModel.weatherForecast.value as? WeatherForecast,
-                        idx: indexPath.row)
-            
+            let cellVM = self.viewModel.getHourlyCellViewModel(at: indexPath)
+            cell?.cellViewModel = cellVM
             guard let cell = cell else { return UICollectionViewCell() }
             return cell
             
         case .weeklyForecast:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WeeklyForecastCollectionViewCell.id,
                                                           for: indexPath) as? WeeklyForecastCollectionViewCell
-            
-            cell?.setup(forecast: self.viewModel.weatherForecast.value as? WeatherForecast,
-                        idx: indexPath.row)
+            let cellVM = self.viewModel.getWeeklyCellViewModel(at: indexPath)
+            cell?.cellViewModel = cellVM
             guard let cell = cell else { return UICollectionViewCell() }
             
             return cell

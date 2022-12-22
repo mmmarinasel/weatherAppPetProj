@@ -3,7 +3,11 @@ import Foundation
 struct WeatherForecast: Codable {
     var location: Location
     var current: CurrentData
-    var forecastday: [ForecastDay]?
+    var forecast: Forecast
+}
+
+struct Forecast: Codable {
+    var forecastday: [ForecastDay]
 }
 
 struct Location: Codable {
