@@ -31,7 +31,6 @@
 		41DEAC7B2953A6E5007752EC /* WeeklyCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41DEAC7A2953A6E4007752EC /* WeeklyCellViewModel.swift */; };
 		41DEAC7D29544D10007752EC /* InfoCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41DEAC7C29544D10007752EC /* InfoCellViewModel.swift */; };
 		41DEAC7F29545199007752EC /* CityCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41DEAC7E29545199007752EC /* CityCellViewModel.swift */; };
-		41DEAC81295451B5007752EC /* SearchCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41DEAC80295451B5007752EC /* SearchCellViewModel.swift */; };
 		41DEAC8329545A4F007752EC /* CurrentWeatherModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41DEAC8229545A4F007752EC /* CurrentWeatherModel.swift */; };
 		41DEAC852954918B007752EC /* SearchTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41DEAC842954918B007752EC /* SearchTextField.swift */; };
 /* End PBXBuildFile section */
@@ -63,7 +62,6 @@
 		41DEAC7A2953A6E4007752EC /* WeeklyCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyCellViewModel.swift; sourceTree = "<group>"; };
 		41DEAC7C29544D10007752EC /* InfoCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoCellViewModel.swift; sourceTree = "<group>"; };
 		41DEAC7E29545199007752EC /* CityCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CityCellViewModel.swift; sourceTree = "<group>"; };
-		41DEAC80295451B5007752EC /* SearchCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCellViewModel.swift; sourceTree = "<group>"; };
 		41DEAC8229545A4F007752EC /* CurrentWeatherModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentWeatherModel.swift; sourceTree = "<group>"; };
 		41DEAC842954918B007752EC /* SearchTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTextField.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -124,8 +122,6 @@
 				41DEAC7329535208007752EC /* Model */,
 				41DEAC7429535213007752EC /* View */,
 				41DEAC7529535219007752EC /* ViewModel */,
-				419E52F4294B5261003B5E43 /* Main.storyboard */,
-				41DEAC842954918B007752EC /* SearchTextField.swift */,
 			);
 			path = Cities;
 			sourceTree = "<group>";
@@ -187,8 +183,10 @@
 		41DEAC7429535213007752EC /* View */ = {
 			isa = PBXGroup;
 			children = (
-				41DEAC7629535239007752EC /* Cells */,
 				419E52F2294B5261003B5E43 /* CitiesListViewController.swift */,
+				419E52F4294B5261003B5E43 /* Main.storyboard */,
+				41DEAC842954918B007752EC /* SearchTextField.swift */,
+				41DEAC7629535239007752EC /* Cells */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -198,7 +196,6 @@
 			children = (
 				41DEAC51294FBC23007752EC /* CitiesListViewModel.swift */,
 				41DEAC7E29545199007752EC /* CityCellViewModel.swift */,
-				41DEAC80295451B5007752EC /* SearchCellViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -226,9 +223,9 @@
 		41DEAC782953527A007752EC /* View */ = {
 			isa = PBXGroup;
 			children = (
+				41DEAC5B2950ADC2007752EC /* ForecastViewController.swift */,
 				41DEAC6C29534A8B007752EC /* Header */,
 				41DEAC6729534A4D007752EC /* Cells */,
-				41DEAC5B2950ADC2007752EC /* ForecastViewController.swift */,
 				41DEAC5529509598007752EC /* Forecast.storyboard */,
 			);
 			path = View;
@@ -329,7 +326,6 @@
 				419E52F1294B5261003B5E43 /* SceneDelegate.swift in Sources */,
 				41DEAC52294FBC23007752EC /* CitiesListViewModel.swift in Sources */,
 				41DEAC6629511A27007752EC /* InfoCollectionViewCell.swift in Sources */,
-				41DEAC81295451B5007752EC /* SearchCellViewModel.swift in Sources */,
 				41DEAC4F294FA768007752EC /* Observable.swift in Sources */,
 				41DEAC6229511A06007752EC /* WeeklyForecastCollectionViewCell.swift in Sources */,
 				41DEAC4B294E86C3007752EC /* WeatherForecastModel.swift in Sources */,

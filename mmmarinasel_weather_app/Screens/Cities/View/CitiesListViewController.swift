@@ -3,10 +3,7 @@ import UIKit
 class CitiesListViewController: UIViewController {
 
     @IBOutlet weak var citiesTableView: UITableView!
-    
-    @IBAction func searchTextField(_ sender: Any) {
-        print("lalallalalala")
-    }
+
     private var viewModel = CitiesListViewModel()
     
     private let backgroundColor = UIColor(named: "list_background")
@@ -17,14 +14,9 @@ class CitiesListViewController: UIViewController {
         self.view.backgroundColor = self.backgroundColor
         self.citiesTableView.backgroundColor = self.backgroundColor
         
-        self.viewModel.currentWeather.bind { [weak self] _ in
+        self.viewModel.citiesCellViewModelsFiltered.bind { [weak self] _ in
             DispatchQueue.main.async {
-                self?.citiesTableView.reloadData()
-            }
-        }
-        self.viewModel.reloadTableView = { [weak self] in
-            DispatchQueue.main.async {
-                self?.citiesTableView.reloadData()
+                self?.citiesTableView.reloadSections(IndexSet(integer: 1), with: .none)
             }
         }
     }
@@ -37,7 +29,7 @@ class CitiesListViewController: UIViewController {
 extension CitiesListViewController: UITableViewDelegate {
 
     func numberOfSections(in tableView: UITableView) -> Int {
-        return self.viewModel.currentWeather.value?.count ?? 0
+        return 2
     }
     
     func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
@@ -94,7 +86,7 @@ extension CitiesListViewController: UITableViewDataSource {
         case 0:
             return 1
         case 1:
-            return self.viewModel.currentWeather.value?.count ?? 0
+            return self.viewModel.citiesCellViewModelsFiltered.value?.count ?? 0
         default:
             return 0
         }
@@ -105,6 +97,7 @@ extension CitiesListViewController: UITableViewDataSource {
         case 0:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: SearchTableViewCell.id) as? SearchTableViewCell else { return UITableViewCell() }
             cell.backgroundColor = self.backgroundColor
+            cell.viewModel = self.viewModel
             return cell
         case 1:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: CityTableViewCell.id) as? CityTableViewCell else { return UITableViewCell() }
@@ -123,7 +116,7 @@ extension CitiesListViewController: UITableViewDataSource {
         let forecastVC  = storyboard.instantiateViewController(withIdentifier: ForecastViewController.id) as? ForecastViewController
         guard let vc = forecastVC else { return }
         vc.modalPresentationStyle = .fullScreen
-        vc.city = self.viewModel.currentWeather.value?[indexPath.row].location.name ?? ""
+        vc.city = self.viewModel.citiesCellViewModelsFiltered.value?[indexPath.row].city ?? ""
         self.present(vc, animated: true)
     }
 }

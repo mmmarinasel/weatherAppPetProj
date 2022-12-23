@@ -52,8 +52,7 @@
                                                         <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
                                                     </userDefinedRuntimeAttributes>
                                                     <connections>
-                                                        <action selector="searchTextField:" destination="BYZ-38-t0r" eventType="editingChanged" id="v09-TF-dKa"/>
-                                                        <outlet property="delegate" destination="BYZ-38-t0r" id="DKb-Mj-15p"/>
+                                                        <action selector="handleSearchTextField:" destination="aNU-TO-BoD" eventType="editingChanged" id="tXS-Sc-7OS"/>
                                                     </connections>
                                                 </textField>
                                             </subviews>
@@ -64,7 +63,7 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <outlet property="searchTextField" destination="JJK-Gs-3Wb" id="mT7-0S-1Mg"/>
+                                            <outlet property="searchTextField" destination="JJK-Gs-3Wb" id="zOx-AX-JSX"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="cityCell" rowHeight="100" id="5vE-MX-zWc" customClass="CityTableViewCell" customModule="mmmarinasel_weather_app" customModuleProvider="target">
@@ -148,7 +147,7 @@
     </scenes>
     <designables>
         <designable name="JJK-Gs-3Wb">
-            <size key="intrinsicContentSize" width="101" height="34"/>
+            <size key="intrinsicContentSize" width="73" height="34"/>
         </designable>
     </designables>
     <resources>

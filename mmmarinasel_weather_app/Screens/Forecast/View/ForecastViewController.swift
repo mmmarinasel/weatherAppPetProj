@@ -26,7 +26,7 @@ class ForecastViewController: UIViewController {
     private var viewModel = ForecastViewModel()
     var city: String? {
         didSet {
-            self.viewModel.city = city ?? ""
+            self.viewModel.city.value = city ?? ""
         }
     }
     
@@ -41,12 +41,15 @@ class ForecastViewController: UIViewController {
                 self?.forecastCollectionView.reloadData()
             }
         }
-        self.viewModel.reloadCollectionView = { [weak self] in
+
+        let updateCollectionView: () -> () = { [weak self] in
             DispatchQueue.main.async {
                 self?.forecastCollectionView.reloadData()
             }
-            
         }
+        self.viewModel.hourlyCellViewModels.bind { _ in updateCollectionView() }
+        self.viewModel.infoCellViewModels.bind { _ in updateCollectionView() }
+        self.viewModel.weeklyCellViewModels.bind { _ in updateCollectionView() }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -160,13 +163,11 @@ class ForecastViewController: UIViewController {
     }
     
     private func supplementaryHeaderViewItem() -> NSCollectionLayoutBoundarySupplementaryItem {
-        var header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize:
+        let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize:
                                                                     .init(widthDimension: .fractionalWidth(1),
                                                                           heightDimension: .estimated(326)),
                                                                  elementKind: UICollectionView.elementKindSectionHeader,
                                                                  alignment: .top)
-//        header.pinToVisibleBounds = true
-//        header.zIndex = 2
         return header
     }
     
@@ -195,7 +196,6 @@ extension ForecastViewController: UICollectionViewDataSource {
             let cellVM = self.viewModel.getHourlyCellViewModel(at: indexPath)
             cell?.cellViewModel = cellVM
             guard let cell = cell else { return UICollectionViewCell() }
-//            cell.backgroundColor = self.backgroundColor
             return cell
             
         case .weeklyForecast:
@@ -204,7 +204,6 @@ extension ForecastViewController: UICollectionViewDataSource {
             let cellVM = self.viewModel.getWeeklyCellViewModel(at: indexPath)
             cell?.cellViewModel = cellVM
             guard let cell = cell else { return UICollectionViewCell() }
-//            cell.backgroundColor = self.backgroundColor
             return cell
             
         case .description:
@@ -214,7 +213,6 @@ extension ForecastViewController: UICollectionViewDataSource {
             cell?.descriptionLabel.text = "Cloudy conditions will continue all day. Wind gusts are up ti 9 mph."
             
             guard let cell = cell else { return UICollectionViewCell() }
-//            cell.backgroundColor = self.backgroundColor
             return cell
             
         case .info:
@@ -223,7 +221,6 @@ extension ForecastViewController: UICollectionViewDataSource {
             let cellVM = self.viewModel.getInfoCellViewModel(at: indexPath)
             cell?.cellViewModel = cellVM
             guard let cell = cell else { return UICollectionViewCell() }
-//            cell.backgroundColor = self.backgroundColor
             return cell
         }
     }

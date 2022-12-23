@@ -5,37 +5,21 @@ class ForecastViewModel: NSObject {
     let weatherForecastUrl = "https://api.weatherapi.com/v1/forecast.json?key=ae5d9a6d0f044d30abb231756221712&q="
     
     var weatherForecast: Observable<WeatherForecast?> = Observable(nil)
-    var reloadCollectionView: (() -> Void)?
-    var hourlyCellViewModels = [HourlyCellViewModel]() {
-        didSet {
-            reloadCollectionView?()
-        }
-    }
-    
-    var weeklyCellViewModels = [WeeklyCellViewModel]() {
-        didSet {
-            reloadCollectionView?()
-        }
-    }
-    
-    var infoCellViewModels = [InfoCellViewModel]() {
-        didSet {
-            reloadCollectionView?()
-        }
-    }
+    var hourlyCellViewModels: Observable<[HourlyCellViewModel]> = Observable([])
+    var weeklyCellViewModels: Observable<[WeeklyCellViewModel]> = Observable([])
+    var infoCellViewModels: Observable<[InfoCellViewModel]> = Observable([])
 
-    var city: String? {
-        didSet {
-            self.getDataForCity()
-        }
-    }
-    
+    var city: Observable<String?> = Observable(nil)
+
     override init() {
         super.init()
+        self.city.bind { [weak self] _ in
+            self?.getDataForCity()
+        }
     }
     
     func getDataForCity() {
-        let replaced = self.city?.replacingOccurrences(of: " ", with: "%20")
+        let replaced = self.city.value??.replacingOccurrences(of: " ", with: "%20")
         
         let url: String = "\(self.weatherForecastUrl)\(replaced ?? "")&days=8"
         ForecastService.getForecast(urlString: url) { [weak self] weatherData in
@@ -48,18 +32,18 @@ class ForecastViewModel: NSObject {
     }
     
     func getHourlyCellViewModel(at indexPath: IndexPath) -> HourlyCellViewModel? {
-        guard !hourlyCellViewModels.isEmpty else { return nil }
-        return self.hourlyCellViewModels[indexPath.row]
+        guard !(hourlyCellViewModels.value?.isEmpty ?? true) else { return nil }
+        return self.hourlyCellViewModels.value?[indexPath.row]
     }
     
     func getWeeklyCellViewModel(at indexPath: IndexPath) -> WeeklyCellViewModel? {
-        guard !weeklyCellViewModels.isEmpty else { return nil }
-        return self.weeklyCellViewModels[indexPath.row]
+        guard !(weeklyCellViewModels.value?.isEmpty ?? true) else { return nil }
+        return self.weeklyCellViewModels.value?[indexPath.row]
     }
     
     func getInfoCellViewModel(at indexPath: IndexPath) -> InfoCellViewModel? {
-        guard !infoCellViewModels.isEmpty else { return nil }
-        return self.infoCellViewModels[indexPath.row]
+        guard !(infoCellViewModels.value?.isEmpty ?? true) else { return nil }
+        return self.infoCellViewModels.value?[indexPath.row]
     }
     
     func fetchHourlyData() {
@@ -80,12 +64,13 @@ class ForecastViewModel: NSObject {
         guard index < 24 else { return }
         
         for item in forecasts[1].hourlyForecast {
-            if index > 24 {
+            if index >= 24 {
                 break
             }
+            index += 1
             vms.append(createHourlyCellModel(forecast: item))
         }
-        self.hourlyCellViewModels = vms
+        self.hourlyCellViewModels.value = vms
     }
     
     func fetchWeeklyData() {
@@ -93,17 +78,17 @@ class ForecastViewModel: NSObject {
         guard let forecast = self.weatherForecast.value else { return }
         guard let forecasts = forecast?.forecast.forecastday else { return }
         guard forecasts.count >= 3 else { return }
+        
+        // API дает бесплатно только три дня, это не костыль, я просто нищая)))
+        
         for idx in 0..<3 {
             vms.append(createWeeklyCellModel(forecast: forecasts[idx]))
         }
         for idx in 0..<3 {
             vms.append(createWeeklyCellModel(forecast: forecasts[idx]))
         }
-//        for idx in 1..<3 {
-//            vms.append(createWeeklyCellModel(forecast: forecasts[idx]))
-//        }
         vms.append(createWeeklyCellModel(forecast: forecasts[1]))
-        self.weeklyCellViewModels = vms
+        self.weeklyCellViewModels.value = vms
     }
     
     func fetchInfoData() {
@@ -125,15 +110,15 @@ class ForecastViewModel: NSObject {
                 vms.append(InfoCellViewModel(name: "UV INDEX", info: "\(Int(item.uv))"))
             }
         }
-        self.infoCellViewModels = vms
+        self.infoCellViewModels.value = vms
     }
     
     func createHourlyCellModel(forecast: HourlyForecast) -> HourlyCellViewModel {
         var currentTime = convertDateFormat(forecast.time,
-                                            dateFormat: "HH a")
+                                            dateFormat: "hh a")
         let imageName = setImageName(condition: forecast.condition.text)
         let temperature = "\(Int(forecast.temperature))º"
-        if getCurrentHours() == convertDateFormat(currentTime, dateFormat: "HH a") {
+        if getCurrentHours() == convertDateFormat(currentTime, dateFormat: "hh a") {
             currentTime = "Now"
         }
         return HourlyCellViewModel(currentTime: currentTime,
@@ -142,7 +127,6 @@ class ForecastViewModel: NSObject {
     }
     
     func createWeeklyCellModel(forecast: ForecastDay) -> WeeklyCellViewModel {
-//        let day = convertDateFormat(forecast.date, dateFormat: "EEEE")
         let day = convertDateFormat(forecast.date, dateFormat: "yyyy-MM-dd", toDT: "EEEE")
         let imageName = setImageName(condition: forecast.day.condition.text)
         var chanceOfPrecipitation = ""

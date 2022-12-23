@@ -7,14 +7,9 @@ class CitiesListViewModel: NSObject {
     
     var currentWeather: Observable<[CurrentWeather]> = Observable([])
     
-    var reloadTableView: (() -> Void)?
-    
-    var citiesCellViewModels = [CityCellViewModel]() {
-        didSet {
-            reloadTableView?()
-        }
-    }
-    
+    var citiesCellViewModels: Observable<[CityCellViewModel]> = Observable([])
+    var citiesCellViewModelsFiltered: Observable<[CityCellViewModel]> = Observable([])
+
     override init() {
         super.init()
         var urls: [String] = []
@@ -32,21 +27,30 @@ class CitiesListViewModel: NSObject {
     }
     
     func getCityCellViewModel(at indexPath: IndexPath) -> CityCellViewModel? {
-        guard !citiesCellViewModels.isEmpty else { return nil }
-        return self.citiesCellViewModels[indexPath.row]
+        guard !(citiesCellViewModels.value?.isEmpty ?? true) else { return nil }
+        return self.citiesCellViewModelsFiltered.value?[indexPath.row]
     }
     
-    func fetchCitiesData() {
+    func filter(_ query: String?) {
+        if (query == nil || query == "") {
+            self.citiesCellViewModelsFiltered.value = self.citiesCellViewModels.value
+            return
+        }
+        guard let query = query else { return }
+        self.citiesCellViewModelsFiltered.value = self.citiesCellViewModels.value?.filter{ $0.city.range(of: query, options: [.caseInsensitive, .anchored]) != nil }
+    }
+    
+    private func fetchCitiesData() {
         var vms = [CityCellViewModel]()
         guard let currentWeather = self.currentWeather.value else { return }
-//        guard currentWeather.count >= 10 else { return }
         for weather in currentWeather {
             vms.append(createCityCellViewModel(data: weather))
         }
-        self.citiesCellViewModels = vms
+        self.citiesCellViewModels.value = vms
+        self.citiesCellViewModelsFiltered.value = self.citiesCellViewModels.value
     }
     
-    func createCityCellViewModel(data: CurrentWeather) -> CityCellViewModel {
+    private func createCityCellViewModel(data: CurrentWeather) -> CityCellViewModel {
         let time = getCurrentTime(data.location.localtime)
         let city = data.location.name
         let currentTemp = "\(Int(data.current.temp))º"
@@ -58,7 +62,7 @@ class CitiesListViewModel: NSObject {
         
     }
     
-    func getCurrentTime(_ str: String) -> String {
+    private func getCurrentTime(_ str: String) -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
         let date = dateFormatter.date(from: str)
@@ -67,7 +71,7 @@ class CitiesListViewModel: NSObject {
         return dateFormatter.string(from: date)
     }
     
-    func setImageName(condition: String) -> String {
+    private func setImageName(condition: String) -> String {
         switch condition {
         case "Sunny":
             return "sunny"

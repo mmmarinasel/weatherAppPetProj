@@ -17,7 +17,6 @@ class ForecastService: ForecastServiceProtocol {
                 print(error.localizedDescription)
                 return
             }
-            print(data)
             guard let data = data else { return }
             
             do {
